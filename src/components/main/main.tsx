@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Cards } from "./cards/cards"
 
 import styles from "./main.module.scss"
-import { getUsers } from "../../redux/reducers/teamReducer"
+import { getUsers, setNextPage } from "../../redux/reducers/teamReducer"
 import { useAppDispatch, useAppSelectortype } from "../../redux/store/store"
 
 
@@ -15,6 +15,8 @@ export const Main = () => {
     const dispatch = useAppDispatch()
 
     const users = useAppSelectortype((state)=> state.info.users)
+    const page = useAppSelectortype((state)=> state.info.page)
+    const perPage = useAppSelectortype((state) => state.info.perPage)
 
     
     const [windowSize, setWindowSize] = useState<IWindowSize>({
@@ -26,16 +28,20 @@ export const Main = () => {
     };
 
     useEffect(()=>{
-        window.addEventListener('resize', handleResize);
-    
+        window.addEventListener('resize', handleResize); 
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     },[])
 
     useEffect(()=>{
-        dispatch(getUsers())
-    },[])
+        dispatch(getUsers({ page:page, perPage: perPage} ))
+    },[page])
+
+
+    const handleNextCards = () => {
+        dispatch(setNextPage())
+    }
 
 
 
@@ -69,7 +75,7 @@ export const Main = () => {
                 ))}
             </div>
             <div className={styles.main_pagination}>
-                <button>Показать ещё
+                <button onClick={handleNextCards} >Показать ещё
                     <svg width="18" 
                     height="10" 
                     viewBox="0 0 18 10" 

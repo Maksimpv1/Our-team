@@ -12,22 +12,27 @@ interface Iuser{
 interface IinitialState {
     users:Iuser[],
     user:Iuser | null,
+    page:number,
+    perPage:number,
 
 }
 
 const initialState:IinitialState = {
     users:[],
     user:null,
+    page:1,
+    perPage:8,
 
 }
 
 
 
 export const getUsers = createAsyncThunk(
-    "users",
-    async ( _ , { dispatch } ) => {     
+    "users/fetchUsers",
+    async ( { page, perPage }: { page:number, perPage:number } , { dispatch } ) => {     
         try {
-            const response = await axiosApiConfig.get(`/users?page=1&per_page=8`);   
+            console.log(page)
+            const response = await axiosApiConfig.get(`/users?page=${page}&per_page=${perPage}`);   
             const gotUsers = response.data
             dispatch(setUsers(gotUsers.data))
         } catch (error: unknown) {
@@ -42,15 +47,18 @@ export const teamSlice = createSlice({
     initialState,
     reducers:{
         setUsers:(state, action)=>{
-            state.users = action.payload
+            state.users = [...state.users, ...action.payload]
         },
         setUser:(state, action: PayloadAction<number>) =>{
             const user = state.users.find(obj => obj.id === action.payload)
             state.user = user || null;
+        },
+        setNextPage:(state)=> {
+            state.page = state.page + 1
         }
     }
 })
 
-export const { setUsers, setUser } = teamSlice.actions
+export const { setUsers, setUser, setNextPage } = teamSlice.actions
 
 export default teamSlice.reducer
