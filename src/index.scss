@@ -1,0 +1,23 @@
+html,
+body,
+ul,
+h1,
+h2,
+h3,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+$bebasfont: 'Bebas Neue', sans-serif;
+
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap') format('truetype');
+}
+
+body{
+  font-family: $bebasfont;
+}
