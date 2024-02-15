@@ -14,6 +14,7 @@ interface IinitialState {
     user:Iuser | null,
     page:number,
     perPage:number,
+    loginState:boolean,
 
 }
 
@@ -22,6 +23,7 @@ const initialState:IinitialState = {
     user:null,
     page:1,
     perPage:8,
+    loginState:false,
 
 }
 
@@ -53,12 +55,15 @@ export const teamSlice = createSlice({
             const user = state.users.find(obj => obj.id === action.payload)
             state.user = user || null;
         },
-        setNextPage:(state)=> {
+        setNextPage:(state) => {
             state.page = state.page + 1
+        },
+        setLoginState:(state) => {
+            state.loginState ? state.loginState = false : state.loginState = true
         }
     }
 })
 
-export const { setUsers, setUser, setNextPage } = teamSlice.actions
+export const { setUsers, setUser, setNextPage, setLoginState } = teamSlice.actions
 
 export default teamSlice.reducer

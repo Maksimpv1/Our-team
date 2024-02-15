@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate  } from "react-router-dom";
 import { useAppDispatch, useAppSelectortype } from "../../../../redux/store/store";
-import { setUser } from "../../../../redux/reducers/teamReducer";
+import { setLoginState, setUser } from "../../../../redux/reducers/teamReducer";
 
 import styles from "./card.module.scss"
 
@@ -14,6 +14,8 @@ export const Card = () => {
     const paramss = useParams();
 
     const navigate = useNavigate();
+
+    const loginState = useAppSelectortype((state) => state.info.loginState)
 
     const [windowSize, setWindowSize] = useState<IWindowSize>({
         windowWidth: window.innerWidth
@@ -39,10 +41,18 @@ export const Card = () => {
             window.removeEventListener('resize', handleResize);
         };
     },[])
+    useEffect(()=>{
+        if(!loginState){
+            navigate('/Login')
+        }
+    },[loginState])
 
     const handleGoBack = () => {
         navigate(-1);
     };
+    const handleClick = () => {
+        dispatch(setLoginState())
+    }
 
 
     return(
@@ -63,9 +73,9 @@ export const Card = () => {
                     </button>
                 )}
                     {windowSize.windowWidth > 800 ? (
-                    <button>Выход</button>
+                    <button onClick={handleClick}>Выход</button>
                     ) : (
-                    <button >
+                    <button onClick={handleClick}>
                         <svg 
                         width="40" 
                         height="40" 

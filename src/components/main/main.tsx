@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import { Cards } from "./cards/cards"
 
 import styles from "./main.module.scss"
-import { getUsers, setNextPage } from "../../redux/reducers/teamReducer"
+import { getUsers, setLoginState, setNextPage } from "../../redux/reducers/teamReducer"
 import { useAppDispatch, useAppSelectortype } from "../../redux/store/store"
+import { useNavigate } from "react-router-dom"
 
 
 interface IWindowSize {
@@ -14,9 +15,13 @@ export const Main = () => {
 
     const dispatch = useAppDispatch()
 
+    const loginState = useAppSelectortype((state) => state.info.loginState)
+
     const users = useAppSelectortype((state)=> state.info.users)
     const page = useAppSelectortype((state)=> state.info.page)
     const perPage = useAppSelectortype((state) => state.info.perPage)
+    
+    const navigate = useNavigate()
 
     
     const [windowSize, setWindowSize] = useState<IWindowSize>({
@@ -28,11 +33,14 @@ export const Main = () => {
     };
 
     useEffect(()=>{
+        if(!loginState){
+            navigate("/Login")
+        }
         window.addEventListener('resize', handleResize); 
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    },[])
+    },[loginState])
 
     useEffect(()=>{
         dispatch(getUsers({ page:page, perPage: perPage} ))
@@ -42,17 +50,18 @@ export const Main = () => {
     const handleNextCards = () => {
         dispatch(setNextPage())
     }
-
-
+    const handleClick = () => {
+        dispatch(setLoginState())
+    }
 
     return(
         <div >
             <header className={styles.container}>
                 <div className={styles.exit_container}>
                     {windowSize.windowWidth > 800 ? (
-                        <button>Выход</button>
+                        <button onClick={handleClick}>Выход</button>
                         ) : (
-                        <button >
+                        <button onClick={handleClick}>
                             <svg 
                             width="40" 
                             height="40" 
