@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./registration.module.scss"
-import { useAppSelectortype } from "../../redux/store/store";
+import { useAppDispatch, useAppSelectortype } from "../../redux/store/store";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUser, setUser } from "../../redux/reducers/teamReducer";
 
 type FormErrors = {
     email: string;
@@ -18,6 +20,7 @@ export const Registration = () => {
 
     const navigate = useNavigate()
     const loginState = useAppSelectortype((state)=> state.info.loginState)
+    const dispatch = useAppDispatch()
 
     const validateEmail = (email: string) => {
         const re = /\S+@\S+\.\S+/;
@@ -48,6 +51,18 @@ export const Registration = () => {
     e.preventDefault();
     validateEmail(email);
     validatePassword(password);
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+            .then(({ user })=>{
+                console.log(user)
+                 dispatch(createUser({
+                    email:user.email,
+                    uid:user.uid,
+                    token:user.refreshToken,
+                }))
+                navigate('/Login')
+            })
+            .catch(console.error)
     navigate('/Login')
     };
 

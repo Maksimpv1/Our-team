@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom"
 import styles from "./login.module.scss"
 import { useAppDispatch, useAppSelectortype } from "../../redux/store/store";
-import { setLoginState } from "../../redux/reducers/teamReducer";
+import { createUser, removeUser, setLoginState } from "../../redux/reducers/teamReducer";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../services/firebase";
 
 type FormErrors = {
     email: string;
@@ -19,6 +21,27 @@ export const LoginForm = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const logState = useAppSelectortype((state)=> state.info.loginState)
+    const userinfo = useAppSelectortype((state)=> state.info.userFirebase)
+
+
+    useEffect(() => {      
+        const userToken = localStorage.getItem('userToken');  
+        if(userToken){
+            navigate('/')
+        }
+        onAuthStateChanged(auth, (user) => {
+          if (user){
+              dispatch(createUser({
+                  email:user.email,
+                  uid:user.uid,
+                  token:user.refreshToken,
+              }))
+          }else {
+            dispatch(removeUser());
+            localStorage.removeItem('userToken');
+          }
+      });
+      },[])
 
     const validateEmail = (email: string) => {
         const re = /\S+@\S+\.\S+/;
@@ -49,8 +72,20 @@ export const LoginForm = () => {
         e.preventDefault();
         validateEmail(email);
         validatePassword(password);
-        dispatch(setLoginState())
-        navigate('/')
+        const auth = getAuth();
+        signInWithEmailAndPassword(auth, email, password)
+          .then(({ user }) => {
+            dispatch(
+              createUser({
+                email: user.email,
+                uid: user.uid, 
+                token: user.refreshToken,
+              })
+            );
+            localStorage.setItem('userToken', user.refreshToken);
+            navigate('/')
+          })
+          .catch(() => alert('Неверный пользователь'));
     };
 
     const validateForm = () => {

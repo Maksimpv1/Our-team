@@ -46,6 +46,31 @@
             }
         }
     }
+    .cards_likeActive{
+        fill: #512689;
+    }
+    button{
+        width: 150px;
+        margin: 0 auto;
+        height: 40px;
+        border-radius: 10px;
+        background-color: #512689;
+        color: #FFFFFF;
+        font-size: 16px;
+        border: none;
+        transition: 0.3s ease-in-out;
+        margin-bottom:20px ;
+        &:hover{
+            transition: 0.3s ease-in-out;
+            background-color: #512689de;
+        }
+        &:active{
+            background-color: #512689;
+        }
+        &:disabled{                
+            background-color: #51268994;
+        }
+    }
 }
 .navlink-custom {
     text-decoration: none; 

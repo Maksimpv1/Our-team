@@ -2,9 +2,12 @@ import { useEffect, useState } from "react"
 import { Cards } from "./cards/cards"
 
 import styles from "./main.module.scss"
-import { getUsers, setLoginState, setNextPage } from "../../redux/reducers/teamReducer"
+import { addToLiked, createUser, getUsers, removeUser, setLoginState, setNextPage } from "../../redux/reducers/teamReducer"
 import { useAppDispatch, useAppSelectortype } from "../../redux/store/store"
 import { useNavigate } from "react-router-dom"
+import { getAuth, onAuthStateChanged, signInWithCustomToken } from "firebase/auth"
+import { auth, dbFirebase } from "../../services/firebase"
+import { doc, getDoc, onSnapshot } from "@firebase/firestore";
 
 
 interface IWindowSize {
@@ -15,11 +18,12 @@ export const Main = () => {
 
     const dispatch = useAppDispatch()
 
-    const loginState = useAppSelectortype((state) => state.info.loginState)
-
     const users = useAppSelectortype((state)=> state.info.users)
     const page = useAppSelectortype((state)=> state.info.page)
     const perPage = useAppSelectortype((state) => state.info.perPage)
+    
+    const userId = useAppSelectortype((state) => state.info.userFirebase.uid)
+    const userFire = useAppSelectortype((state) => state.info.userFirebase)
     
     const navigate = useNavigate()
 
@@ -31,28 +35,72 @@ export const Main = () => {
     const handleResize = () => {
         setWindowSize({ windowWidth: window.innerWidth });
     };
+    useEffect(()=>{
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log('Добро пожаловать')
+            dispatch(
+                createUser({
+                  email: user.email,
+                  uid: user.uid, 
+                  token: user.refreshToken,
+                })
+              );  
+            console.log(user.refreshToken)      
+            console.log(userId)
+        } else {
+            navigate("/Login")
+            localStorage.removeItem('userToken');
+        }
+        });
+    },[])
 
     useEffect(()=>{
-        if(!loginState){
-            navigate("/Login")
+        const userToken = localStorage.getItem('userToken');
+        if (!userToken) {
+            navigate("/Login");
+        } else {
+            dispatch(getUsers({ page: page, perPage: perPage, func: 1 }));
         }
-        window.addEventListener('resize', handleResize); 
+        window.addEventListener('resize', handleResize);
+
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    },[loginState])
-
-    useEffect(()=>{
-        dispatch(getUsers({ page:page, perPage: perPage} ))
-    },[page])
-
+    },[])
 
     const handleNextCards = () => {
         dispatch(setNextPage())
+        dispatch(getUsers({ page:page + 1, perPage: perPage, func: 2} ))
     }
     const handleClick = () => {
-        dispatch(setLoginState())
+        dispatch(removeUser())
+        localStorage.removeItem('userToken');
+        navigate("/Login")
     }
+
+
+
+    useEffect(() => {
+        const userToken = localStorage.getItem('userToken');
+        console.log(userId)
+        if(userToken){
+        const docRef = doc(dbFirebase, 'profile', userId);
+        const likedUse = onSnapshot(docRef, (doc) => {
+            if (doc.exists()) {
+                dispatch(addToLiked(doc.data()));
+                console.log(doc.data())
+            } else {
+                console.log("Документ не существует");
+            }
+        });
+    
+        return () => {
+            likedUse();
+        };
+        }
+    }, []);
 
     return(
         <div >
