@@ -5,6 +5,7 @@ import './index.scss'
 import { Card } from './components/main/cards/card/card';
 import { LoginForm } from './components/login/login';
 import { Registration } from './components/registr/registration';
+import { NotFoundPage } from './components/notFound/notFound';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/Card/:id" element={<Card/>}/>
           <Route path="/Login" element={<LoginForm/>}/>
           <Route path="/Registration" element={<Registration/>}/>
+          <Route path="*" element={<NotFoundPage/>} />
         </Routes>
       </Router>
     </div>

@@ -35,8 +35,11 @@ export const Main = () => {
     const handleResize = () => {
         setWindowSize({ windowWidth: window.innerWidth });
     };
+
+    
+    const auth = getAuth();
+    
     useEffect(()=>{
-        const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log('Добро пожаловать')
@@ -47,8 +50,6 @@ export const Main = () => {
                   token: user.refreshToken,
                 })
               );  
-            console.log(user.refreshToken)      
-            console.log(userId)
         } else {
             navigate("/Login")
             localStorage.removeItem('userToken');
@@ -84,23 +85,24 @@ export const Main = () => {
 
     useEffect(() => {
         const userToken = localStorage.getItem('userToken');
-        console.log(userId)
-        if(userToken){
-        const docRef = doc(dbFirebase, 'profile', userId);
-        const likedUse = onSnapshot(docRef, (doc) => {
-            if (doc.exists()) {
-                dispatch(addToLiked(doc.data()));
-                console.log(doc.data())
-            } else {
-                console.log("Документ не существует");
-            }
-        });
-    
-        return () => {
-            likedUse();
-        };
+        if(userId){
+            if(userToken){
+            const docRef = doc(dbFirebase, 'profile', userId);
+            const likedUse = onSnapshot(docRef, (doc) => {
+                if (doc.exists()) {
+                    dispatch(addToLiked(doc.data()));
+                    console.log(doc.data())
+                } else {
+                    console.log("Документ не существует");
+                }
+            });
+        
+            return () => {
+                likedUse();
+            };
+        }            
         }
-    }, []);
+    }, [userId]);
 
     return(
         <div >
@@ -125,6 +127,7 @@ export const Main = () => {
                 <p>Это опытные специалисты, хорошо разбирающиеся во всех задачах,
                      которые ложатся на их плечи, и умеющие находить выход из любых,
                       даже самых сложных ситуаций. </p>
+                <p>Your email:{userFire.email}</p>
             </header>
             <div className={styles.cards_container}>
                 {Array.isArray(users) && users.map((user ,index )=>(
