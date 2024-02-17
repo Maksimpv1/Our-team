@@ -2,7 +2,7 @@
   "name": "our_team",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https//Maksimpv1/github.io/our_team",
+  "homepage": "https://maksimpv1.github.io/our_team",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.0",
     "@testing-library/jest-dom": "^5.17.0",
