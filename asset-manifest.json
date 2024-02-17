@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/https//Maksimpv1/github.io/our_team/static/css/main.e218b7d1.css",
-    "main.js": "/https//Maksimpv1/github.io/our_team/static/js/main.cd3ae022.js",
-    "static/js/592.dcc42a07.chunk.js": "/https//Maksimpv1/github.io/our_team/static/js/592.dcc42a07.chunk.js",
-    "index.html": "/https//Maksimpv1/github.io/our_team/index.html",
-    "main.e218b7d1.css.map": "/https//Maksimpv1/github.io/our_team/static/css/main.e218b7d1.css.map",
-    "main.cd3ae022.js.map": "/https//Maksimpv1/github.io/our_team/static/js/main.cd3ae022.js.map",
-    "592.dcc42a07.chunk.js.map": "/https//Maksimpv1/github.io/our_team/static/js/592.dcc42a07.chunk.js.map"
+    "main.css": "/our_team/static/css/main.e218b7d1.css",
+    "main.js": "/our_team/static/js/main.7c6844f4.js",
+    "static/js/592.dcc42a07.chunk.js": "/our_team/static/js/592.dcc42a07.chunk.js",
+    "index.html": "/our_team/index.html",
+    "main.e218b7d1.css.map": "/our_team/static/css/main.e218b7d1.css.map",
+    "main.7c6844f4.js.map": "/our_team/static/js/main.7c6844f4.js.map",
+    "592.dcc42a07.chunk.js.map": "/our_team/static/js/592.dcc42a07.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e218b7d1.css",
-    "static/js/main.cd3ae022.js"
+    "static/js/main.7c6844f4.js"
   ]
 }
