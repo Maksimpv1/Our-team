@@ -1,11 +1,12 @@
 import { Main } from './components/main/main';
 import {  HashRouter as Router, Routes, Route } from 'react-router-dom';
 
-import './index.scss'
 import { Card } from './components/main/cards/card/card';
 import { LoginForm } from './components/login/login';
 import { Registration } from './components/registr/registration';
 import { NotFoundPage } from './components/notFound/notFound';
+
+import './index.scss'
 
 function App() {
 

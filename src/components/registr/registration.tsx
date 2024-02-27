@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import styles from "./registration.module.scss"
+
 import { useAppDispatch, useAppSelectortype } from "../../redux/store/store";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { createUser, setUser } from "../../redux/reducers/teamReducer";
+import { createUser } from "../../redux/reducers/teamReducer";
+
+import styles from "./registration.module.scss"
 
 type FormErrors = {
     email: string;

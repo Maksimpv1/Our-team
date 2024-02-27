@@ -1,10 +1,10 @@
-import { NavLink, useNavigate } from 'react-router-dom'
-import styles from './cards.module.scss'
-import { useAppDispatch, useAppSelectortype } from '../../../redux/store/store'
-import { ILiked, addLikedCards, addToLiked, deleteLikedCards } from '../../../redux/reducers/teamReducer'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { doc, getDoc, onSnapshot } from "@firebase/firestore";
-import { dbFirebase } from '../../../services/firebase'
+
+import { useAppDispatch, useAppSelectortype } from '../../../redux/store/store'
+import { addLikedCards, deleteLikedCards } from '../../../redux/reducers/teamReducer'
+
+import styles from './cards.module.scss'
 
 interface Iuser{
     user:{

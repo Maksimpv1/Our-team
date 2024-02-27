@@ -3,34 +3,7 @@ import { axiosApiConfig } from "../../api/axiosConfig";
 import { dbFirebase } from "../../services/firebase";
 import { doc, updateDoc, getDoc, arrayUnion, setDoc } from "@firebase/firestore";
 import { storeType } from "../store/store";
-
-interface Iuser{
-    avatar:string,
-    first_name:string,
-    last_name:string,
-    id:number,
-    email:string,
-}
-export interface ILiked {
-    Liked?:number[]
-}
-
-interface IinitialState {
-    users:Iuser[],
-    user:Iuser | null,
-    page:number,
-    perPage:number,
-    loginState:boolean,
-    userToken:string,
-    userFirebase:{
-        email:string | null,
-        password:string | null,
-        token:string | null,
-        uid: string,
-    },
-    Liked:ILiked,
-
-}
+import { IinitialState } from "./reduceTypes";
 
 const initialState:IinitialState = {
     users:[],
